@@ -1,0 +1,87 @@
+#host-select option{
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 0.15rem;
+}
+#host-select option:hover{
+	cursor: pointer;
+	background-color: #07eba662;		
+}
+.preview-img {
+	max-height: 64px;
+	margin: 5px;
+}
+.preview-img:hover {
+	cursor: pointer;
+	opacity: 0.8;
+	border: 1px solid indigo;
+	border-radius: 5px;
+}
+
+.upload-status p {
+	margin: 0.15rem;
+}
+
+.file-list {
+	margin-top: 20px;
+}
+.file-row {
+	padding: 5px;
+	border-bottom: 1px solid #ccc;
+}
+.file-row:hover {
+	background-color: #07eba662;
+}
+.file-row button {
+	margin-left: auto;
+}
+
+
+.fa-1-25x{
+	font-size: 1.25rem;
+}
+.fa-1-5x{
+	font-size: 1.5rem;
+}
+.cast-box {
+	width: 100%;
+}
+
+.backdrop-blur{
+	backdrop-filter: blur(2px) !important;
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+	.cast-box {
+		width: 75% !important;
+	}
+	.playlist-detail-box {
+		width: 75% !important;
+	}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+	.cast-box {
+		width: 75% !important;
+	}
+}
+
+/* Larger landscape tablets, 820px and up) */
+@media only screen and (min-width: 820px) {
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 990px) {
+	.cast-box {
+		width: 50% !important;
+	}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+	.cast-box {
+		width: 40% !important;
+	}
+}

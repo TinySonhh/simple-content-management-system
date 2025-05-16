@@ -1,0 +1,16 @@
+<FilesMatch "^\.env.*">
+  Require all denied
+</FilesMatch>
+
+RewriteEngine On
+RewriteBase /
+Options All -Indexes -MultiViews
+
+#### PERSISTENT CONTENT ####
+DirectoryIndex index.php index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+SetEnv MY_DB_SERVERNAME sql615.main-hosting.eu
+
+#SetEnv MY_DB_SERVERNAME localhost
