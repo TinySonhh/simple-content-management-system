@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/auth.php';
+
 $host = $_GET['host'] ?? '';
 $file = $_GET['file'] ?? '';
 

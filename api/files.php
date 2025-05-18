@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/__config.php';
 // Expect JSON input
 $raw = file_get_contents('php://input');

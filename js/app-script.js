@@ -42,6 +42,9 @@ $('body').on('click', '#reload-all-path', function (event) {
 		.then(confirmation => {
 			if (confirmation) {
 				fetch('api/load-path.php', {
+						headers: {
+							'Authorization': 'Bearer ' + window.apiToken
+						},	
 						method: 'POST'})
 					.then(res => res.json())
 					.then(data => {
@@ -180,6 +183,9 @@ $('body').on('submit', '#upload-form', function(e) {
 	statusDiv.innerHTML = '<p>Uploading...</p>';
 
 	fetch('api/upload.php', {
+			headers: {
+				'Authorization': 'Bearer ' + window.apiToken
+			},
 			method: 'POST',
 			body: formData
 		})
@@ -240,7 +246,8 @@ function loadUploadedFiles(sub_path = "") {
 	fetch('api/files.php', {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + window.apiToken
 		},
 		body: JSON.stringify({
 			host_root: $('#host-root').val(),
@@ -282,7 +289,8 @@ function deleteFile(host, file) {
 			fetch(`api/delete.php?host=${host}&file=${file}`, {
 					method: 'DELETE',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + window.apiToken
 					},
 					body: JSON.stringify({
 						host_root: $('#host-root').val(),
@@ -310,7 +318,8 @@ function saveHosts() {
 	fetch('api/save-path.php', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + window.apiToken
 			},
 			body: JSON.stringify(selected)
 		})
@@ -325,7 +334,8 @@ function saveRootPath() {
 	fetch('api/save-config.php', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + window.apiToken
 			},
 			body: JSON.stringify({ rootPath })
 		})

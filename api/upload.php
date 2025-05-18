@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/auth.php';
+
 $host_root = $_POST['host_root'] ?? __DIR__;
 $hosts = $_POST['hosts'] ?? [];
 $response = [];

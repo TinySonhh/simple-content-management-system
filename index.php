@@ -46,8 +46,10 @@ $default_sub_paths = loadAllPaths(__DIR__ . ($use_default_sub_paths ? '/data/def
 	<script src="js/anti-hacking.js"></script>	
 	<script src="js/popup.js"></script>	
 	<script src="js/modals.js"></script>			
-	<script>	
+	<script class="auto-delete">	
 		const HOST_NAME_URL = "<?= HOST_NAME_URL ?>";	
+		window.apiToken = "<?=$_SESSION['jwt']?? '---' ?>";
+		$(".auto-delete").remove();
 	</script>	
 </head>
 

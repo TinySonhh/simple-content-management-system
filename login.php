@@ -3,6 +3,7 @@ session_start();
 
 require_once 'helpers/env.php';
 include_once 'api/__config.php';
+require_once __DIR__ . '/api/jwt.core.php';
 
 $valid_user = env('APP_USERNAME', 'admin');
 $valid_pass = env('APP_PASSWORD', 'admin');
@@ -15,6 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	if ($user === $valid_user && $pass === $valid_pass) {
 			$_SESSION['logged_in'] = true;
+			//create jwt token
+			$payload = [
+				'username' => $user,				
+				'exp' => time() + env('SESSION_LIFETIME', 3600)
+			];
+			$secret_key = env('APP_KEY');
+			$algorithm = env('APP_ALGORITHM', 'HS256');
+			$jwt = JWT::encode($payload, $secret_key, $algorithm);
+			$_SESSION['jwt'] = $jwt;
+
 			header('Location: index.php');
 			exit;
 	} else {

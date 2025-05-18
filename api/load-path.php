@@ -6,6 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Invalid request method.']);
     exit;
 }
+
+require_once __DIR__ . '/auth.php';
+
 $file = __DIR__ . '/../data/paths.json';
 if (!file_exists($file)) {
     return [];
