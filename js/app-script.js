@@ -229,16 +229,20 @@ $('body').on('click', '.btn-file-list-view', function() {
 	const parent = $(this).closest('.file-row')
 	let path = parent.data('path');
 	let file = parent.data('name');	
-	const url = `${HOST_NAME_URL}/${path}/${file}`
+	const url_path = `${HOST_NAME_URL}/${path}`
+	const url = `${url_path}/${file}`	
+	const moreItems = parent.parent().find('.file-previewable');
+	let allPreviewable = [];
+	if (moreItems.length > 0) {
+		moreItems.each(function() {
+			allPreviewable.push(url_path + "/" + $(this).data('name'));
+		});
+	}
+	
 	if(isImageFile(url)){
-		//const img = document.createElement('img');
-		//img.src = url;
-		//img.classList.add('preview-img');
-		//preview.innerHTML = '';
-		//preview.appendChild(img);
-		GalleryPreviewer.show(url)
+		GalleryPreviewer.show(allPreviewable, allPreviewable.indexOf(url));
 	} else {
-		window.open(url, 'preview');
+		AnyFileViewer.previewFile($('#host-root').val(), path, file)	
 	}
 })
 
@@ -272,11 +276,14 @@ function loadUploadedFiles(sub_path = "") {
 			data[host]?.forEach(file => {
 				const fileRow = document.createElement('div');
 				fileRow.classList.add('file-row', 'd-flex', 'align-items-center', 'justify-content-start', 'pointer');
+				if(file.type == "file" && isFilePreviewable(file.name)){
+					fileRow.classList.add('file-previewable');
+				}
 				fileRow.dataset.path = host;
 				fileRow.dataset.name = file.name;
 				fileRow.dataset.type = file.type;
 				fileRow.innerHTML =
-					`<span>${file.name}</span>
+					`<span class='name ${file.type}'>${file.name}</span>
 					<button type='button' class='btn-file-list-view ml-auto btn btn-sm btn-small btn-primary ${(file.type=="file" && !isCodeFile(file.name))? "":"d-none"}'>
 						<i class="fa fa-eye" aria-hidden="true"></i>
 					</button>

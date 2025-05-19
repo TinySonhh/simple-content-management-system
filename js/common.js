@@ -246,12 +246,23 @@ function isMobileDevice() {
 		|| window.matchMedia("(max-width: 768px)").matches;
 }
 
+function isFilePreviewable(filename) {
+	const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'tiff', 'ico',
+		'mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'mpeg', 'mpg',
+		'mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a',
+		'txt', 'csv', 'log', 'json'];
+
+	const ext = filename.split('.').pop().toLowerCase();
+	return validExtensions.includes(ext);
+}
+
 function isImageFile(filename) {
 	const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'tiff', 'ico'];
 	const ext = filename.split('.').pop().toLowerCase();
 	return validExtensions.includes(ext);
 }
 function isCodeFile(filename) {
+	return false;
 	//list all code file extensions
 	const validExtensions = ['htaccess', 'webmanifest', 'js', 'css', 'html','xml', 'php', 'java', 'c', 'cpp', 'cs', 'py', 'rb', 'go', 'swift'];	
 	const ext = filename.split('.').pop().toLowerCase();

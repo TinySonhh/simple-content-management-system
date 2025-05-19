@@ -180,6 +180,8 @@ $default_sub_paths = loadAllPaths(__DIR__ . ($use_default_sub_paths ? '/data/def
 
 	<script src="js/app-script.js"></script>	
 	<script src="js/gallery-previewer.js"></script>	
+	<script src="js/any-file-viewer.js"></script>	
+	<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 </body>
 
 </html>

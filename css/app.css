@@ -34,6 +34,15 @@
 .file-row button {
 	margin-left: auto;
 }
+.file-row .name.folder {
+	font-weight: 500;	
+}
+.file-row .name.folder::before {
+	content: "[";	
+}
+.file-row .name.folder::after {
+	content: "]";
+}
 
 
 .fa-1-25x{
