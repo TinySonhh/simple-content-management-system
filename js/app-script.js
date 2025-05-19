@@ -46,15 +46,15 @@ $('body').on('click', '#reload-all-path', function (event) {
 							'Authorization': 'Bearer ' + window.apiToken
 						},	
 						method: 'POST'})
-					.then(res => res.json())
+					.then(res => handleFetchError(res))
 					.then(data => {
 						$('#host-select').empty();
 						Object.keys(data).forEach(host => {
 							const option = new Option(data[host], host);	
 							$('#host-select').append(option);
 						})					
-						Toast.success("Hosts reloaded successfully");
-					});
+						Object.keys(data).length>0 && Toast.success("Hosts reloaded successfully");
+					})
 			}
 		})
 });
@@ -189,7 +189,7 @@ $('body').on('submit', '#upload-form', function(e) {
 			method: 'POST',
 			body: formData
 		})
-		.then(res => res.json())
+		.then(res => handleFetchError(res))
 		.then(data => {
 			statusDiv.innerHTML = '';
 			data.forEach(entry => {
@@ -242,6 +242,14 @@ $('body').on('click', '.btn-file-list-view', function() {
 	}
 })
 
+function handleFetchError(res) {
+	if (!res.ok || res.status == 401 || res.status == 403 || res.status == 404 || res.status == 500) {
+		Toast.error(`Your working session expired, or you are not logged in correctly. Please try to login again.`);		
+		return {}
+	}
+	return res.json()
+}
+
 function loadUploadedFiles(sub_path = "") {
 	fetch('api/files.php', {
 		method: 'POST',
@@ -253,7 +261,7 @@ function loadUploadedFiles(sub_path = "") {
 			host_root: $('#host-root').val(),
 			sub_path: sub_path
 		})
-	}).then(res => res.json()).then(data => {
+	}).then(res => handleFetchError(res)).then(data => {
 		uploadedFilesDiv.innerHTML = '';
 				
 		Object.keys(data).forEach(host => {
@@ -279,7 +287,7 @@ function loadUploadedFiles(sub_path = "") {
 			});
 			uploadedFilesDiv.appendChild(hostDiv);
 		});
-	});
+	})
 }
 
 function deleteFile(host, file) {
@@ -323,8 +331,8 @@ function saveHosts() {
 			},
 			body: JSON.stringify(selected)
 		})
-		.then(res => res.json())
-		.then(data => console.log(data))
+		.then(res => handleFetchError(res))
+		.then(data => {})
 		.catch(err => console.error('Error:', err));
 }
 
@@ -339,7 +347,7 @@ function saveRootPath() {
 			},
 			body: JSON.stringify({ rootPath })
 		})
-		.then(res => res.json())
+		.then(res => handleFetchError(res))
 		.catch(err => console.error('Error:', err));
 }
 

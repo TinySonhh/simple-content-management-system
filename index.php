@@ -31,6 +31,8 @@ $default_sub_paths = loadAllPaths(__DIR__ . ($use_default_sub_paths ? '/data/def
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex, nofollow">
+
 	<title><?=APP_NAME?></title>
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
