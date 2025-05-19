@@ -147,8 +147,10 @@ echo getenv('APP_URL'); // https://app.hssoftvn.com
 
 ---
 
+## Completed recently:
+* Respond to the 401 error so that users know what happen, and lead them to login again to continue
+
 ## TODO 
 * Tidy it JWT
-* Respond to the 401 error so that users know what happen, and lead them to login again to continue
 
 Let me know if you want me to export this directly as `README.md` or generate a GitHub-ready project scaffold for you.
