@@ -87,6 +87,7 @@ Simple login form with predefined username/password, defined in .env file
 
 * PHP-only, no database required
 * Session-based
+* JWT token
 * Protects uploader page until authenticated
 
 ---
@@ -105,6 +106,10 @@ COMPANY_NAME_BRIEF=your_company_name
 APP_DOMAIN="${COMPANY_NAME_BRIEF}.com"
 HOSTING_DIR_ROOT="/home/xxxxx/domains/${APP_DOMAIN}/public_html"
 HOSTING_DIR_ROOT_LOCALHOST="d:/${APP_DOMAIN}"
+SESSION_LIFETIME=3600
+APP_ALGORITHM=HS256
+APP_USERNAME=admin
+APP_PASSWORD=admin
 ```
 
 Please check `.env.template` for more info.
@@ -141,5 +146,9 @@ echo getenv('APP_URL'); // https://app.hssoftvn.com
 * Base `<base>` tag is used to adjust relative paths for frontend only
 
 ---
+
+## TODO 
+* Tidy it JWT
+* Respond to the 401 error so that users know what happen, and lead them to login again to continue
 
 Let me know if you want me to export this directly as `README.md` or generate a GitHub-ready project scaffold for you.
