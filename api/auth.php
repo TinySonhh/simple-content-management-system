@@ -1,10 +1,8 @@
 <?php
 session_start();
 
-//$headers = apache_request_headers();
 $headers = getallheaders();
 
-//$token = str_replace('Bearer ', '', $headers['Authorization']?? $_SESSION['jwt']?? '---');
 $token = null;
 $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? null;
 
@@ -29,11 +27,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     redirectToLoginPage();
 }
 
-require_once __DIR__ . '/jwt.core.php';
+require_once __DIR__ . '/jwt.php';
 require_once __DIR__ . '/../helpers/env.php';
-
-$secret_key = env('APP_KEY');
-$algorithm = env('APP_ALGORITHM', 'HS256');
 
 if ($isRESTful) {
     $token = substr($authHeader, 7); // Strip "Bearer "
@@ -43,9 +38,7 @@ if ($isRESTful) {
     $token = '---';
 }
 
-try {
-    $decoded = JWT::decode($token, $secret_key, [$algorithm]);
-    $user_id = $decoded->username;   
-} catch (Exception $e) {
-    redirectToLoginPage();
-}
+$jwt = MyJWT::create();
+$decoded = $jwt->decodeToken($token, function ($e) {
+    redirectToLoginPage($e->getMessage());
+});
