@@ -20,12 +20,27 @@ if (!$filepath || !file_exists($filepath)) {
 
 $mime = mime_content_type($filepath);
 header("Content-Type: $mime");
+$sizeInBytes = filesize($filepath);
+$sizeInKB = round($sizeInBytes / 1024, 2);      // in KB
+$sizeInMB = round($sizeInBytes / 1048576, 2);   // in MB
 
-// Text files preview as plain text
-if (str_starts_with($mime, 'text/')) {
-    readfile($filepath);
+//only allow preview file size < 5MB
+if($sizeInMB<5){
+    // Text files preview as plain text
+    if (str_starts_with($mime, 'text/')) {
+        readfile($filepath);
+    } else {
+        // Other files as download or embed src
+        header("Content-Disposition: inline; filename=\"" . basename($filepath) . "\"");
+        readfile($filepath);
+    }
 } else {
-    // Other files as download or embed src
-    header("Content-Disposition: inline; filename=\"" . basename($filepath) . "\"");
-    readfile($filepath);
+    //413 Payload Too Large
+    http_response_code(413 );
+    header('Content-Type: application/json');
+    echo json_encode([
+        "result" => "error",
+        "info" => "file size is too large, it cannot be larger than 5MB.",
+    ]);
+    exit;
 }
