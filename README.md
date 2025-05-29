@@ -3,7 +3,7 @@
 A clean, Composer-free, multi-host file uploader app built with PHP and JavaScript, featuring:
 
 * Multi-file upload
-* Image preview before upload
+* Preview any files and manage(e.g. remove them) before uploading
 * Support for multiple upload targets (hosts)
 * Real-time upload status
 * Browsing and deleting uploaded files per host
@@ -20,10 +20,11 @@ A clean, Composer-free, multi-host file uploader app built with PHP and JavaScri
 /logout.php
 /css
 /js
+/js/modals.js           # Modal popup to wrap the default confirm, alert, prompt
 /js/app-scripts.js      # Your main JavaScript logic
-/js/image-previewer.js  # Standalone gallery previewer
-/js/gallery-previewer.js  # Standalone gallery previewer
-/api/config.php         # convert environment data into DEFINE
+/js/gallery-previewer.js# Standalone images previewer supporting slideshow
+/js/any-file-viewer.js  # Able to preview any files, images included
+/api/__config.php       # convert environment data into DEFINE
 /api/upload.php         # Upload handler
 /api/delete.php         # File deletion handler
 /api/files.php          # File listing per host
@@ -33,33 +34,56 @@ A clean, Composer-free, multi-host file uploader app built with PHP and JavaScri
 ...
 ```
 
+## 📁 Requirements
+
+### **Front End**
+Make sure to include all following libraries in your PHP files so that all JS libraries can work properly.
+  - bootstrap@4.6.1
+  - font-awesome/4.7.0
+  - jquery/3.5.1
+
+### **Back End**
+  - PHP
+  - .env processing
+  - .htaccess configuration
+
+
 ---
 
 ## 💡 Features
 
 ### ✅ Multi-File Uploader (Frontend in BS4)
 
-* Drag & drop (WIP) or file input (`<input type="file" name="files[]" multiple>`)
-* Preview image thumbnails before uploading
+* Select multiple files from from a single folder.
+* Preview and manage them (e.g remove) before uploading
 * Choose target host(s) for upload
 * Progress feedback for each file
+* Drag & drop (WIP)
 
-### ✅ PHP Upload Handler (`upload.php`)
+### ✅ JS Files & Folder Uploader (`js/folder-uploader.js`, `js/files-uploader.js`)
+
+* Using `input-file` (`<input type="file" name="files[]" multiple>`) for files and `input-webkitdirectory` or `File System API` for folder
+* Handles any file type
+* Detects and distinguishes files/folders via `scandir`
+* Uploads to dynamically chosen subfolders based on host
+* Keeps upload history and returns JSON status
+
+### ✅ PHP Upload Handler (`api/upload.php`, `api/upload-multi.php`)
 
 * Handles any file type
 * Detects and distinguishes files/folders via `scandir`
 * Uploads to dynamically chosen subfolders based on host
 * Keeps upload history and returns JSON status
 
-### ✅ File Management (`files.php`, `delete.php`)
+### ✅ File Management (`api/files.php`, `api/delete.php`)
 
 * Lists uploaded files per host
 * Deletes files via AJAX
 * Shows labels accordingly
 
-### ✅ Image Previewer (`image-previewer.js`, `image-previewer.js`)
+### ✅ Image Previewer (`js/gallery-previewer.js`)
 
-* Single JS file, just `<script src="...">` to use
+Single JS file, just `<script src="...">` to use
 * Supports:
 
   * Fullscreen overlay with dim background
@@ -68,6 +92,7 @@ A clean, Composer-free, multi-host file uploader app built with PHP and JavaScri
   * Smooth bounce effect at gallery bounds
   * Close button
   * Shows file name info
+  * Support keyboard: Left/Up (←), Right/Down/Enter (→), and ESC (close)
 
 ```js
 // Example usage:
@@ -79,9 +104,32 @@ GalleryPreviewer.show([
 ]);
 ```
 
+### ✅ Any File Previewer (`js/any-file-viewer.js` ,`api/preview.php`)
+
+Preview all files:
+* `AnyFileViewer.previewFile(host_root, sub_path, file)`:
+  - fetch files and folder using `api/preview.php` from a remote host file by this path `${host_root}/${sub_path}/${file}` on server
+  - then render the corresponding content to the preview pane
+* `AnyFileViewer.previewUploadFile(path, fileMap={})`:
+  - preview the content of uploading files via the input controls (temporarily stored in browser memory (RAM), not on disk or server)
+  - then render the corresponding content to the preview pane
+  - `fileMap`: is the mapped JSON object of the input.files, using this method
+  - `path`: is the key of a item in `fileMap`
+
+```js
+function getFileMapOf(files=[]){
+  const fileMap = {};
+  Array.from(files || []).forEach(file => {
+   const fullPath = file.webkitRelativePath || file.name;
+   fileMap[fullPath] = file;
+  });
+  return fileMap;
+}
+```
+
 ---
 
-## 🔐 Login System (`api/auth.php`, `login.php`, `logout.php`)
+## 🔐 Login System (`api/jwt.php`, `api/auth.php`, `login.php`, `logout.php`)
 
 Simple login form with predefined username/password, defined in .env file
 
@@ -92,7 +140,7 @@ Simple login form with predefined username/password, defined in .env file
 
 ---
 
-## 🔧 .env Loader (`env-loader.php`)
+## 🔧 .env Loader (`helpers/env.php`, `.env`, `.htaccess`)
 
 .env file is safely protected by .htaccess file
 
@@ -148,15 +196,19 @@ echo getenv('APP_URL'); // https://app.hssoftvn.com
 ---
 
 ## Completed recently:
+
 ### 29 May 2025:
 * change root-dir file listing
 * implement previewer
 * more friendly UI to select files and upload
-* support select files and also folder
+* support select files and also folder (folder-uploader.js)
+
 ### Minor
 * Respond to the 401 error so that users know what happen, and lead them to login again to continue
+* Tidy it JWT
 
 ## TODO 
-* Tidy it JWT
+* Split FilesUploader as a single uploader as Folder Uploader
+* Drag & drop (WIP)
 
 Let me know if you want me to export this directly as `README.md` or generate a GitHub-ready project scaffold for you.
