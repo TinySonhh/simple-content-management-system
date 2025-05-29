@@ -17,8 +17,8 @@ if($server_name != APP_HOST){
     $url_origin = LOCALHOST;	
 }
 
-$current_url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-$is_local = ($url_origin == LOCALHOST);
+$current_url = ($_SERVER['REQUEST_SCHEME']??"http") . "://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$is_local = $url_origin == LOCALHOST;
 
 function isLocal(): bool{
 	global $is_local;
