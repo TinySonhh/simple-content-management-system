@@ -148,6 +148,12 @@ echo getenv('APP_URL'); // https://app.hssoftvn.com
 ---
 
 ## Completed recently:
+### 29 May 2025:
+* change root-dir file listing
+* implement previewer
+* more friendly UI to select files and upload
+* support select files and also folder
+### Minor
 * Respond to the 401 error so that users know what happen, and lead them to login again to continue
 
 ## TODO 
