@@ -43,9 +43,15 @@ Make sure to include all following libraries in your PHP files so that all JS li
   - jquery/3.5.1
 
 ### **Back End**
+  - XAMP for localhost [https://www.apachefriends.org/download.html]
   - PHP
   - .env processing
   - .htaccess configuration
+
+### **Tools**
+  - python [https://www.python.org/downloads/]
+  - javascript-obfuscator [https://github.com/javascript-obfuscator/javascript-obfuscator]
+  - Windows OS. You can port them to Linux later.
 
 
 ---
