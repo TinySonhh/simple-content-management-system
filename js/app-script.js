@@ -53,30 +53,6 @@ $("body").on('change', ".form-control-file", function(event) {
 	});
 });
 
-function getFileMapOf(files=[]){
-	const fileMap = {};
-	Array.from(files || []).forEach(file => {
-		const fullPath = file.webkitRelativePath || file.name;
-		fileMap[fullPath] = file;
-	});
-	return fileMap;
-}
-
-//FolderUploader is a global object that is defined in folder-uploader.js
-//use for-in loop to iterate over files in fileMap
-function removeFromUploadFileList(fileInputElement, targetNameOrPath) {
-  const dt = new DataTransfer();
-
-  Array.from(fileInputElement.files).forEach(file => {
-    const fullPath = file.webkitRelativePath || file.name;
-    if (fullPath !== targetNameOrPath) {
-      dt.items.add(file); // giữ lại file
-    }
-  });
-
-  fileInputElement.files = dt.files;
-}
-
 $('body').on('click', '#theSimplePreviewer .preview-item', function(event) {
 	event.stopPropagation(); // Prevent the click event from bubbling up
 	const fileEl = this;

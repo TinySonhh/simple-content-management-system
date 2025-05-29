@@ -268,3 +268,78 @@ function isCodeFile(filename) {
 	const ext = filename.split('.').pop().toLowerCase();
 	return validExtensions.includes(ext);
 }
+
+function middleTruncate(text, maxLength=30) {
+  if (text.length <= maxLength) return text;
+  const keep = maxLength - 3;
+  const front = Math.ceil(keep / 2);
+  const back = Math.floor(keep / 2);
+  return text.slice(0, front) + '...' + text.slice(text.length - back);
+}
+
+// Convert a FileList to a map with full paths as keys
+// This is useful for handling files with the same name in different directories
+function getFileMapOf(files=[]){
+	const fileMap = {};
+	Array.from(files || []).forEach(file => {
+		const fullPath = file.webkitRelativePath || file.name;
+		fileMap[fullPath] = file;
+	});
+	return fileMap;
+}
+
+// Remove a file from the upload file list by its name or path
+function removeFromUploadFileList(fileInputElement, targetNameOrPath) {
+  const dt = new DataTransfer();
+
+  Array.from(fileInputElement.files).forEach(file => {
+    const fullPath = file.webkitRelativePath || file.name;
+    if (fullPath !== targetNameOrPath) {
+      dt.items.add(file); // giữ lại file
+    }
+  });
+
+  fileInputElement.files = dt.files;
+}
+
+//More libraries can be added to the moreLibs array.
+//format: [{ name: 'LibraryName'}] or ['LibraryName']
+function checkLibsStatus(moreLibs = []) {
+	// Check if jQuery, Bootstrap, and Font Awesome are loaded
+	const result = {
+		jQuery: !!(window.jQuery && jQuery.fn.jquery >= '3.5.1'),
+		Bootstrap: !!(window.jQuery && jQuery.fn.modal && window.bootstrap), // modal() is a bootstrap-added jQuery plugin
+		FontAwesome: !!document.querySelector('link[href*="font-awesome"], link[href*="fontawesome"]')
+	};
+	// Check for additional libraries
+	if (typeof moreLibs === 'string') {
+		moreLibs = [{name: moreLibs}];
+	} else if (Array.isArray(moreLibs) && moreLibs.every(lib => typeof lib === 'string')) {
+		moreLibs = moreLibs.map(lib => ({ name: lib }));
+	}
+
+	moreLibs.forEach(lib => {
+		result[lib.name] = !!(window[lib.name]);
+	});
+
+	if (!result.jQuery) console.warn("❌ jQuery 3.5.1+ not found");
+	if (!result.Bootstrap) console.warn("❌ Bootstrap 4.6.1+ not found or loaded before jQuery");
+	if (!result.FontAwesome) console.warn("❌ Font Awesome 4.7.0 not found");
+	let moreLibsMissing = false;
+	moreLibs.forEach(lib => {
+		if (!result[lib.name]) {
+			moreLibsMissing = true;
+			console.warn(`❌ ${lib.name} not found. Global Name: ${lib.name}`);
+		}
+	});
+
+	//If one of the libraries is not loaded, log a warning
+	if (!result.jQuery || !result.Bootstrap || !result.FontAwesome || moreLibsMissing) {
+		console.table(result);
+		throw new Error("❌ Required libraries are not loaded. Please check the console for details.");
+	} else {
+		//console.log("✅ All required libraries are loaded successfully.");
+	}
+
+	return result;
+}

@@ -1,5 +1,8 @@
 // any-file-viewer.js
 (function() {
+	checkLibsStatus(['ModalPopup', 'Toast']);	
+	if (window.AnyFileViewer) return; // Prevent multiple initializations
+
 	const style = document.createElement('style');
 	style.innerHTML = `
 		#x-preview-box {

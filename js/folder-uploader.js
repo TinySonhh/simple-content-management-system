@@ -1,5 +1,7 @@
 //folder-uploader.js
 (function() {
+	checkLibsStatus(['ModalPopup', 'Toast']);	
+	if (window.FolderUploader) return; // Prevent multiple initializations
 	const style = document.createElement('style');
 	style.innerHTML = `
 		#x-folder-uploader ul {

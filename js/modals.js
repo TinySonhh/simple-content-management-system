@@ -372,3 +372,5 @@ class ModalPopup {
     static alertSuccess = ModalAlert.alertSuccess
     static alertDangerous = ModalAlert.alertDangerous
 }
+window.ModalPopup = ModalPopup;
+// Export the ModalPopup class for use in other modules
