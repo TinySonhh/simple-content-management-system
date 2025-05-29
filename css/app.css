@@ -17,6 +17,10 @@
 	border-radius: 5px;
 }
 
+#theSimplePreviewer .preview-item::before {
+	content: "📄 ";
+}
+
 .upload-status p {
 	margin: 0.15rem;
 }
@@ -38,10 +42,13 @@
 	font-weight: 500;	
 }
 .file-row .name.folder::before {
-	content: "[";	
+	content: "📁 ";	
 }
 .file-row .name.folder::after {
-	content: "]";
+	content: " ";
+}
+.file-row .name.file::before {
+	content: "📄 ";	
 }
 
 

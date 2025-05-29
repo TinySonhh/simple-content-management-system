@@ -16,6 +16,7 @@ function redirectToLoginPage($message="Unauthorized. Please login.") {
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'error',
+            'error' => $message,
             'message' => $message,
         ]);
         exit();
@@ -25,6 +26,7 @@ function redirectToLoginPage($message="Unauthorized. Please login.") {
 }
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     redirectToLoginPage();
+    exit();
 }
 
 require_once __DIR__ . '/jwt.php';

@@ -14,30 +14,55 @@ $result = [];
 
 try{
     if(empty($sub_path)){
-        foreach (glob("$base/*", GLOB_ONLYDIR) as $hostDir) {
-            $host = basename($hostDir);
-            if(file_exists($hostDir)){
-                $children = scandir($hostDir);
-                $entries = array_diff($children, ['.', '..']);                
-                //$result[$host] = array_values($entries);            
+        //Use detail level 2 for the root directory
+        $useDetailLevel2 = false;
+        if(!$useDetailLevel2){
+            $host = trim($sub_path," \n\r\t\v\x00/");
+            if(file_exists($base)){
+                $children = scandir($base);
+                $entries = array_diff($children, ['.', '..']);            
+                //$result[$host] = array_values($entries);
                 
                 $result[$host] = [];
                 foreach ($entries as $entry) {
-                    $path = $hostDir . DIRECTORY_SEPARATOR . $entry;
+                    $path = $base . DIRECTORY_SEPARATOR . $entry;
                     $result[$host][] = [
-                        'name' => $entry,                  
+                        'name' => $entry,            
                         'type' => is_dir($path) ? 'folder' : 'file'
                     ];
                 }
+            } else {            
+                $result[$host][] = [
+                    'name' => "Directory does not exist.",                    
+                    'type' => 'error'
+                ];
+            }
+        } else{
+            foreach (glob("$base/*", GLOB_ONLYDIR) as $hostDir) {            
+                if(file_exists($hostDir)){
+                    $host = basename($hostDir);
+                    $children = scandir($hostDir);
+                    $entries = array_diff($children, ['.', '..']);                
+                    //$result[$host] = array_values($entries);            
+                    
+                    $result[$host] = [];
+                    foreach ($entries as $entry) {
+                        $path = $hostDir . DIRECTORY_SEPARATOR . $entry;
+                        $result[$host][] = [
+                            'name' => $entry,                  
+                            'type' => is_dir($path) ? 'folder' : 'file'
+                        ];
+                    }
                 } else {
                     $result[$host][] = [
                         'name' => "Directory does not exist.",                    
                         'type' => 'error'
                     ];
-                }         
+                }
+            }
         }
     } else {
-        $host = $sub_path;
+        $host = trim($sub_path," \n\r\t\v\x00/");
         if(file_exists($base)){
             $children = scandir($base);
             $entries = array_diff($children, ['.', '..']);            
@@ -51,7 +76,7 @@ try{
                     'type' => is_dir($path) ? 'folder' : 'file'
                 ];
             }
-        }else {            
+        } else {            
             $result[$host][] = [
                 'name' => "Directory does not exist.",                    
                 'type' => 'error'

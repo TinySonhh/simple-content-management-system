@@ -61,14 +61,35 @@
 
   const container = document.createElement('div');
   container.id = 'x-gallery-previewer';
+  //Set tabindex to 0 to make it focusable and to be able to use the keyboard
+  container.setAttribute('tabindex', '0');
   container.innerHTML = `
-    <button class="close-btn" onclick="GalleryPreviewer.hide()">&times;</button>
+    <button class="x-close close-btn" onclick="GalleryPreviewer.hide()">&times;</button>
     <button class="nav-btn left-btn" onclick="GalleryPreviewer.prev()">&#10094;</button>
     <img id="x-gallery-preview-element" src="" alt="Preview">
     <button class="nav-btn right-btn" onclick="GalleryPreviewer.next()">&#10095;</button>
     <div class="info d-none" id="img-preview-filename"></div>
   `;
   document.body.appendChild(container);
+
+  $('body').on('keydown', '#x-gallery-previewer', function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (['ArrowRight', 'Enter', 'ArrowDown'].includes(event.key)) {
+      window.GalleryPreviewer.next();
+    } else  if (['ArrowLeft', 'Backspace', 'ArrowUp'].includes(event.key)) {
+      window.GalleryPreviewer.prev();
+    }
+
+		if (event.key === 'Escape') {
+			window.GalleryPreviewer.hide();
+		}
+	});
+
+  $('body').on('keyup', '#x-gallery-previewer', function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  })
 
   window.GalleryPreviewer = {
     container: document.getElementById('x-gallery-previewer'),
@@ -82,6 +103,7 @@
       this.index = startIndex;
       this.displayImage();
       this.container.style.display = 'flex';
+      this.container.focus();
     },
 
     displayImage() {
